@@ -10,7 +10,7 @@ namespace NHibernate.Api.Controllers
     public class UserController : BaseController
     {
         [HttpPost]
-        [Route("Users/Get")]
+        [Route("User/Get")]
         public CustomResult<IList<User>> Get(string userId)
         {
             CustomResult<IList<User>> result = new CustomResult<IList<User>>();

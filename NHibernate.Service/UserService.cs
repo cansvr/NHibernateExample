@@ -48,11 +48,64 @@ namespace NHibernate.Service
             CustomResult<Users> result = new CustomResult<Users>() { IsSucceeded = false };
             UserRepository userRepository = new UserRepository();
             Users userResult = new Users();
-            if (user.Id > 0)
-            {
 
+            userResult = userRepository.Get(user.Id);
+
+            if (userResult != null)
+            {
+                userResult = userRepository.InsertOrUpdate(user);
             }
-            userResult = userRepository.InsertOrUpdate(user);
+            else
+            {
+                user.Id = 0;
+                userResult = userRepository.InsertOrUpdate(user);
+            }
+
+            result.IsSucceeded = true;
+            result.TransactionResult = userResult;
+            return result;
+        }
+
+        public CustomResult<Users> Update(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>() { IsSucceeded = false };
+            UserRepository userRepository = new UserRepository();
+            Users userResult = new Users();
+
+            userResult = userRepository.Get(user.Id);
+
+            if (userResult != null)
+            {
+                userResult = userRepository.Update(user);
+            }
+            else
+            {
+                result.ErrorMessage = "Kayıt bulunamadı.";
+            }
+
+            result.IsSucceeded = true;
+            result.TransactionResult = userResult;
+            return result;
+        }
+
+        public CustomResult<Users> Delete(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>() { IsSucceeded = false };
+            UserRepository userRepository = new UserRepository();
+            Users userResult = new Users();
+
+            userResult = userRepository.Get(user.Id);
+
+            if (userResult != null)
+            {
+                userRepository.Delete(user);
+            }
+            else
+            {
+                result.ErrorMessage = "Kayıt bulunamadı.";
+            }
+
+            result.IsSucceeded = true;
             result.TransactionResult = userResult;
             return result;
         }

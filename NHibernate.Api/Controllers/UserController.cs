@@ -36,5 +36,34 @@ namespace NHibernate.Api.Controllers
 
             return result;
         }
+
+        [HttpPost]
+        [Route("User/Update")]
+        public CustomResult<Users> Update(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>();
+
+            using (UserService service = new UserService())
+            {
+                result = service.Update(user);
+            }
+
+            return result;
+        }
+
+
+        [HttpPost]
+        [Route("User/Delete")]
+        public CustomResult<Users> Delete(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>();
+
+            using (UserService service = new UserService())
+            {
+                result = service.Delete(user);
+            }
+
+            return result;
+        }
     }
 }

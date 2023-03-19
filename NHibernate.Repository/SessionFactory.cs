@@ -4,6 +4,7 @@ using NHibernate.Data.Base;
 using NHibernateExample.Data;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,7 @@ namespace NHibernate.Repository
                         string connStr = DbSettings.GetConnectionString("ConnectionString");
 
                         _sessionFactory = Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(connStr))
-                           .Mappings(m => m.FluentMappings.AddFromAssemblyOf<User>())
+                           .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Users>())
                            .ExposeConfiguration(x => x.SetProperty("connection.release_mode", "on_close")/*.SetInterceptor(new SqlStatementInterceptor())*/)
                            .BuildSessionFactory();
                     }
@@ -54,7 +55,7 @@ namespace NHibernate.Repository
                     try
                     {
                         _sessionFactory = Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(connectionString))
-                           .Mappings(m => m.FluentMappings.AddFromAssemblyOf<User>())
+                           .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Users>())
                            .ExposeConfiguration(x => x.SetProperty("connection.release_mode", "on_close"))
                            .BuildSessionFactory();
                     }
@@ -66,6 +67,15 @@ namespace NHibernate.Repository
             }
 
             return _sessionFactory;
+        }
+
+        public class SqlStatementInterceptor : EmptyInterceptor
+        {
+            public override NHibernate.SqlCommand.SqlString OnPrepareStatement(NHibernate.SqlCommand.SqlString sql)
+            {
+                Trace.WriteLine(sql.ToString());
+                return sql;
+            }
         }
     }
 }

@@ -11,13 +11,27 @@ namespace NHibernate.Api.Controllers
     {
         [HttpPost]
         [Route("User/Get")]
-        public CustomResult<IList<User>> Get(string userId)
+        public CustomResult<IList<Users>> Get(CustomRequest filter)
         {
-            CustomResult<IList<User>> result = new CustomResult<IList<User>>();
+            CustomResult<IList<Users>> result = new CustomResult<IList<Users>>();
 
             using (UserService service = new UserService())
             {
-                result = service.Get(userId);
+                result = service.Get(filter);
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        [Route("User/InsertOrUpdate")]
+        public CustomResult<Users> InsertOrUpdate(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>();
+
+            using (UserService service = new UserService())
+            {
+                result = service.InsertOrUpdate(user);
             }
 
             return result;

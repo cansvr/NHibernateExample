@@ -13,20 +13,47 @@ namespace NHibernate.Service
 
         }
 
-        public CustomResult<IList<User>> Get(string userName)
+        public CustomResult<IList<Users>> Get(CustomRequest filter)
         {
-            CustomResult<IList<User>> result = new CustomResult<IList<User>>();
-            UserRepository repoWorkOrder = new UserRepository();
+            CustomResult<IList<Users>> result = new CustomResult<IList<Users>>() { IsSucceeded=false};
+            UserRepository userRepository = new UserRepository();
+            IList<Users> userList = new List<Users>();
+            Users user = new Users();
 
-            if (string.IsNullOrEmpty(userName))
+            if (filter == null)
             {
-                repoWorkOrder.GetAll();
+                result.IsSucceeded = false;
+                result.ErrorMessage = "Parametreler boş gönderilemez.";
+                return result;
+            }
+
+            if (filter.UserId == null)
+            {
+                userList = userRepository.GetAll();
+                result.TransactionResult = userList;
             }
             else
             {
-                //repoWorkOrder.Get();
+                user = userRepository.Get(filter.UserId);
+                userList.Add(user);
+                result.TransactionResult = userList;
             }
 
+            result.IsSucceeded = true;
+            return result;
+        }
+
+        public CustomResult<Users> InsertOrUpdate(Users user)
+        {
+            CustomResult<Users> result = new CustomResult<Users>() { IsSucceeded = false };
+            UserRepository userRepository = new UserRepository();
+            Users userResult = new Users();
+            if (user.Id > 0)
+            {
+
+            }
+            userResult = userRepository.InsertOrUpdate(user);
+            result.TransactionResult = userResult;
             return result;
         }
     }

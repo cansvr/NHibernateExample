@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NHibernate.Repository
 {
-    public class UserRepository: Repository<User>
+    public class UserRepository: Repository<Users>
     {
 
     }
